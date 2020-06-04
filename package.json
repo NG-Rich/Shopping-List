@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/NG-Rich/Shopping-List/issues"
   },
-  "homepage": "https://github.com/NG-Rich/Shopping-List#readme"
+  "homepage": "https://github.com/NG-Rich/Shopping-List#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "axios": "^0.19.2"
+  }
 }
