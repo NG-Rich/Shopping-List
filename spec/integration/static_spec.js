@@ -10,6 +10,7 @@ describe("routes : static", () => {
       axios.get(base)
       .then((res) => {
         expect(res.status).toBe(200);
+        expect(res.data).toContain("Welcome to Kart!");
         done();
       });
     });
