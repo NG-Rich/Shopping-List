@@ -11,11 +11,7 @@ describe("routes : static", () => {
       .then((res) => {
         expect(res.status).toBe(200);
         done();
-      })
-      .catch((err) => {
-        console.log(error);
-        done();
-      })
+      });
     });
   });
 
