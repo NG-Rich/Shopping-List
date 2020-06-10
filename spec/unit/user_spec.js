@@ -18,14 +18,14 @@ describe("User", () => {
 
     it("should create a User object with correct values", (done) => {
       User.create({
-        fname: "Richy",
-        lname: "Rich",
+        fName: "Richy",
+        lName: "Rich",
         email: "richy@example.com",
         password: "123456"
       })
       .then((user) => {
-        expect(user.fname).toBe("Richy");
-        expect(user.lname).toBe("Rich");
+        expect(user.fName).toBe("Richy");
+        expect(user.lName).toBe("Rich");
         expect(user.email).toBe("richy@example.com");
         expect(user.id).toBe(1);
         done();
@@ -35,6 +35,22 @@ describe("User", () => {
         done();
       });
     });
+
+    it("should not create a User object with incorrect values", (done) => {
+      User.create({
+        fName: "Mel",
+        lName: "Sa",
+        email: "onad93-#33",
+        password: "123456"
+      })
+      .then((user) => {
+        done();
+      })
+      .catch((err) => {
+        expect(err.message).toContain("must be a valid email");
+        done();
+      })
+    })
 
   }); // End of create()
 

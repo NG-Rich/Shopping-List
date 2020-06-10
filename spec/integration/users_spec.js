@@ -19,13 +19,21 @@ describe("routes : users", () => {
 
   describe("GET /users", () => {
 
-    it("should return a status code 200", (done) => {
+    it("should return a status code 200 and render sign up page", (done) => {
       request.get(`${base}sign_up`, (err, res, body) => {
         expect(res.statusCode).toBe(200);
         expect(res.body).toContain("Create an account");
         done();
       });
     });
+
+    it("should return a status code 200 and render a sign in page", (done) => {
+      request.get(`${base}sign_in`, (err, res, body) => {
+        expect(res.statusCode).toBe(200);
+        expect(body).toContain("Sign in to Kart");
+        done();
+      });
+    })
 
   }); // End GET /users
 

@@ -6,11 +6,11 @@ module.exports = {
       req.checkBody("fName", "must not be empty").notEmpty();
       req.checkBody("lName", "must not by empty").notEmpty();
       req.checkBody("email", "must be a valid email").isEmail();
-      /* Reevaluate for duplicate emails
+      /* this works live, but fails during tests
       req.checkBody("email", "is taken!").custom(value => {
         let user = User.findOne({where: {email: value}});
 
-        if(user == false) {
+        if(!user) {
           return false;
         }
       })
