@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../static/partials/head'); %>
+  </head>
+  <body>
+    <%- include('../static/partials/navbar'); %>
+    <%- include('../static/partials/messages'); %>
+
+    <h1 class="text-center py-5">Sign in to Kart</h1>
+
+    <div class="container px-6">
+      <form class="form" action="/users/sign_in" method="post">
+        <div class="form-group">
+        <label for="email">Email:</label>
+          <input type="email" class="form-control bg-light" name="email" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control bg-light" name="password" aria-describedby="passwordHelp">
+          <small class="text-muted" id="passwordHelp">Password must be at least 6 characters.</small>
+        </div>
+        <button type="submit" class="btn btn-success btn-lg btn-block">Sign In</button>
+      </form>
+    </div>
+
+    <%- include('../static/partials/baseScripts'); %>
+  </body>
+</html>
