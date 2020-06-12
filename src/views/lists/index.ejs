@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../static/partials/head'); %>
+  </head>
+  <body>
+    <%- include('../static/partials/navbar'); %>
+    <%- include('../static/partials/messages'); %>
+
+    <h1 class="text-center py-4">My Lists</h1>
+
+    <div class="container text-center">
+      <% if (lists == false) { %>
+        <h3>You don't have any lists!</h3>
+        <a href="/lists/new">
+          <button type="submit" class="btn btn-success btn-lg">Create a list</button>
+        </a>
+      <% }else { %>
+        <% lists.forEach((list) => { %>
+          <ul>
+            <%= list.title %>
+          </ul>
+        <% }) %>
+      <% } %>
+    </div>
+
+
+    <%- include('../static/partials/baseScripts'); %>
+  </body>
+</html>
