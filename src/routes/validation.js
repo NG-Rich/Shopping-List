@@ -42,5 +42,20 @@ module.exports = {
     }else {
       return next();
     }
+  },
+  validateList(req, res, next) {
+    if(req.method === "POST") {
+      req.checkBody("title", "should not be empty").notEmpty();
+      req.checkBody("description", "should not be empty").notEmpty();
+    }
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+      req.flash("error", errors);
+      return res.redirect(req.headers.referer);
+    }else {
+      return next();
+    }
   }
 }
