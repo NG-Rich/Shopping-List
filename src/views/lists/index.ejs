@@ -12,18 +12,26 @@
     <div class="container text-center">
       <% if (lists == false) { %>
         <h3>You don't have any lists!</h3>
-        <a href="/lists/new">
-          <button type="submit" class="btn btn-success btn-lg">Create a list</button>
+        <a class="btn btn-success btn-lg" href="/lists/new" role="button">
+          Create a list
         </a>
       <% }else { %>
         <% lists.forEach((list) => { %>
-          <ul>
-            <%= list.title %>
+          <ul class="list-group-item py-0 border-0">
+            <li class="list-group-item">
+              <a class="lead text-decoration-none"  href="/lists/<%= list.id %>">
+                <%= list.title %>
+              </a>
+              <a class="btn btn-warning btn-sm text-decoration-none" href="/lists/<%= list.id %>/edit" role="button">Edit</a>
+              <form class="d-inline" action="/lists/<%= list.id %>/destroy" method="post">
+                <button class="btn btn-danger btn-sm" type="submit" name="button">Delete</button>
+              </form>
+              <small class="d-flex justify-content-center text-muted"><%= list.description %></small>
+            </li>
           </ul>
         <% }) %>
       <% } %>
     </div>
-
 
     <%- include('../static/partials/baseScripts'); %>
   </body>
