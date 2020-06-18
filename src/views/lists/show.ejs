@@ -10,9 +10,29 @@
     <h1 class="text-center py-4"><%= list.title %></h1>
 
     <div class="container px-6">
-      <p>
-        Add items here!
-      </p>
+      <form class="d-flex justify-content-center py-2" action="/lists/<%= list.id %>/item/create" method="post">
+        <label class="mr-2" for="name">Item:</label>
+        <input class="mr-2" type="text" name="name" aria-describedby="itemHelp" placeholder="Item name">
+        <button type="submit" class="btn btn-success btn-sm px-2">Add Item</button>
+      </form>
+
+      <% if(list.items) { %>
+        <% list.items.forEach((item) => { %>
+          <ul class="list-group px-5">
+            <li class="list-group-item d-flex justify-content-center align-items-baseline">
+              <%= item.name %> |
+              <% if(item.purchased == false) { %>
+                <input class="ml-2 mr-2" type="checkbox" name="purchased">
+                <label for="purchased">Purchased |</label>
+              <% } %>
+              <a class="btn btn-warning btn-sm ml-2 mr-1" href="/lists/<%= item.listId %>/item/<%= item.id %>/edit">Edit</a>
+              <form action="/lists/<%= item.listId %>/item/<%= item.id %>/destroy" method="post">
+                <button class="btn btn-danger btn-sm" type="submit" name="button">Delete</button>
+              </form>
+            </li>
+          </ul>
+        <% }) %>
+      <% } %>
     </div>
 
 

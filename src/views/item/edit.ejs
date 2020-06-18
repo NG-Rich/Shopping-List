@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <%- include('../static/partials/head'); %>
+  </head>
+  <body>
+    <%- include('../static/partials/navbar'); %>
+    <%- include('../static/partials/messages'); %>
+
+    <h1 class="text-center py-4">Edit Item</h1>
+
+    <div class="container px-6">
+      <form class="" action="/lists/<%= item.listId %>/item/<%= item.id %>/update" method="post">
+        <div class="form-group">
+          <label for="name">Item Name:</label>
+          <input class="form-control" type="text" name="name" aria-describedby="nameHelp" value="<%= item.name %>">
+        </div>
+        <button type="submit" class="btn btn-success btn-lg btn-block">Update Item</button>
+      </form>
+    </div>
+
+
+    <%- include('../static/partials/baseScripts'); %>
+  </body>
+</html>
