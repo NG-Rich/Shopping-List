@@ -1,5 +1,6 @@
 const List = require("./models").List;
 const Items = require("./models").Items;
+const Authorizer = require("../policies/application");
 
 module.exports = {
   getAllLists(callback) {
@@ -11,10 +12,11 @@ module.exports = {
       callback(err);
     });
   },
-  createList(newList, callback) {
+  createList(req, newList, callback) {
     List.create({
       title: newList.title,
-      description: newList.description
+      description: newList.description,
+      userId: req.user.id
     })
     .then((list) => {
       callback(null, list);
@@ -40,29 +42,39 @@ module.exports = {
   updateList(req, updatedList, callback) {
     List.findByPk(req.params.id)
     .then((list) => {
+      const authorized = new Authorizer(req.user, list).update();
 
-      list.update(updatedList, {
-        fields: Object.keys(updatedList)
-      })
-      .then(() => {
-        callback(null, list);
-      })
-      .catch((err) => {
-        callback(err);
-      });
-
+      if (authorized) {
+        list.update(updatedList, {
+          fields: Object.keys(updatedList)
+        })
+        .then(() => {
+          callback(null, list);
+        })
+        .catch((err) => {
+          callback(err);
+        });
+      }else {
+        callback("Forbidden");
+      }
     });
   },
   deleteList(req, callback) {
     List.findByPk(req.params.id)
     .then((list) => {
-      list.destroy()
-      .then((list) => {
-        callback(null, list);
-      })
-      .catch((err) => {
-        callback(err);
-      })
-    })
+      const authorized = new Authorizer(req.user, list).destroy();
+
+      if (authorized) {
+        list.destroy()
+        .then((list) => {
+          callback(null, list);
+        })
+        .catch((err) => {
+          callback(err);
+        });
+      }else {
+        callback("Forbidden");
+      }
+    });
   }
 }

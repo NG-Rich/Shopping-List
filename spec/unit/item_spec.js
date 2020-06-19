@@ -1,27 +1,50 @@
 const sequelize = require("../../src/db/models/index").sequelize;
 const Items = require("../../src/db/models").Items;
 const List = require("../../src/db/models").List;
+const User = require("../../src/db/models").User;
 
 describe("Item", () => {
 
   beforeEach((done) => {
+    this.user;
     this.list;
+    this.item;
 
     sequelize.sync({force: true})
     .then((res) => {
-      List.create({
-        title: "Groceries",
-        description: "Groceries 4 the week"
+      User.create({
+        fName: "Richy",
+        lName: "Rich",
+        email: "rich@example.com",
+        password: "123456"
       })
-      .then((list) => {
-        this.list = list;
+      .then((user) => {
+        this.user = user;
+
+        List.create({
+          title: "Groceries",
+          description: "Groceries 4 the week",
+          userId: this.user.id
+        })
+        .then((list) => {
+          this.list = list;
+
+          Items.create({
+            name: "Chips",
+            purchased: false,
+            listId: this.list.id
+          })
+          .then((item) => {
+            this.item = item;
+            done();
+          })
+        })
+      })
+      .catch((err) => {
+        console.log(err);
         done();
-      })
-    })
-    .catch((err) => {
-      console.log(err);
-      done();
-    })
+      });
+    });
   }); // End of beforeEach
 
   describe("create()", () => {

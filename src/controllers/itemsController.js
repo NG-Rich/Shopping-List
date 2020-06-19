@@ -1,24 +1,30 @@
 const itemQuery = require("../db/queries.items.js");
+const Authorizer = require("../policies/application");
 
 module.exports = {
   create(req, res, next) {
-    let newItem = {
-      name: req.body.name,
-      purchased: false,
-      listId: req.params.id
-    }
+    const authorized = new Authorizer(req.user).new();
 
-    itemQuery.createItem(newItem, (err, item) => {
-      if (err) {
-        req.flash("notice", "Couldn't create item! Try again!");
-        res.redirect(`/lists/${newItem.listId}`);
-      }else {
-        req.flash("notice", "Item successfully added!");
-        res.redirect(`/lists/${newItem.listId}`);
+    if (authorized) {
+      let newItem = {
+        name: req.body.name,
+        purchased: false,
+        listId: req.params.id
       }
-    });
 
-
+      itemQuery.createItem(newItem, (err, item) => {
+        if (err) {
+          req.flash("notice", "Couldn't create item! Try again!");
+          res.redirect(`/lists/${newItem.listId}`);
+        }else {
+          req.flash("notice", "Item successfully added!");
+          res.redirect(`/lists/${newItem.listId}`);
+        }
+      });
+    }else {
+      req.flash("notice", "You must be signed in to do this!");
+      res.redirect("/users/sign_in");
+    }
   },
   edit(req, res, next) {
     itemQuery.getItem(req, (err, item) => {
@@ -26,7 +32,14 @@ module.exports = {
         req.flash("notice", "Couldn't find item!");
         res.redirect("/lists");
       }else {
-        res.render(`item/edit`, {item});
+        const authorized = new Authorizer(req.user).new();
+
+        if (authorized) {
+          res.render(`item/edit`, {item});
+        }else {
+          req.flash("notice", "You must be signed in to do this!");
+          res.redirect("/users/sign_in");
+        }
       }
     });
   },

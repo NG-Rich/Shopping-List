@@ -26,7 +26,8 @@ describe("routes : items", () => {
 
         List.create({
           title: "Groceries",
-          description: "Groceries 4 the week"
+          description: "Groceries 4 the week",
+          userId: this.user.id
         })
         .then((list) => {
           this.list = list;
@@ -41,6 +42,17 @@ describe("routes : items", () => {
             done();
           })
         })
+
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            email: this.user.email,
+            userId: this.user.id
+          }
+        }, (err, res, body) => {
+          done();
+        });
+
       })
       .catch((err) => {
         console.log(err);
