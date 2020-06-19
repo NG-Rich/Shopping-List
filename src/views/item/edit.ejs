@@ -15,6 +15,17 @@
           <label for="name">Item Name:</label>
           <input class="form-control" type="text" name="name" aria-describedby="nameHelp" value="<%= item.name %>">
         </div>
+        <% if(item.purchased == false) { %>
+          <div class="form-check form-check-inline d-flex justify-content-center">
+            <input class="form-check-input ml-2" type="checkbox" name="purchased" value="true">
+            <label class="form-check-label mr-2" for="purchased">Mark as Purchased</label>
+          </div>
+        <% }else { %>
+          <div class="form-check form-check-inline d-flex justify-content-center">
+            <input class="form-check-input ml-2" type="checkbox" name="purchased" checked="true" value="false">
+            <label class="form-check-label mr-2" for="purchased">Unmark as Purchased</label>
+          </div>
+        <% } %>
         <button type="submit" class="btn btn-success btn-lg btn-block">Update Item</button>
       </form>
     </div>
