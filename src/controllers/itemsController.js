@@ -8,7 +8,7 @@ module.exports = {
     if (authorized) {
       let newItem = {
         name: req.body.name,
-        purchased: false,
+        purchased: req.body.purchased,
         listId: req.params.id
       }
 
@@ -63,5 +63,9 @@ module.exports = {
         res.redirect(req.headers.referer);
       }
     })
+  },
+  changePurchase() {
+    document.getElementById('purchaseItem').value = true;
+    console.log("this was called!");
   }
 }

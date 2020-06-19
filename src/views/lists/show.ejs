@@ -22,10 +22,17 @@
             <li class="list-group-item d-flex justify-content-center align-items-baseline">
               <%= item.name %> |
               <% if(item.purchased == false) { %>
-                <input class="ml-2 mr-2" type="checkbox" name="purchased">
-                <label for="purchased">Purchased |</label>
+                <span class="form-check form-check-inline disabled">
+                  <input class="form-check-input ml-2" type="checkbox" name="purchased" disabled>
+                  <label class="form-check-label mr-2" for="purchased">Purchased</label>|
+                </span>
+              <% }else { %>
+                <span class="form-check form-check-inline disabled">
+                  <input class="form-check-input ml-2" type="checkbox" name="purchased" checked="true" disabled>
+                  <label class="form-check-label mr-2" for="purchased">Purchased</label>|
+                </span>
               <% } %>
-              <a class="btn btn-warning btn-sm ml-2 mr-1" href="/lists/<%= item.listId %>/item/<%= item.id %>/edit">Edit</a>
+              <a class="btn btn-warning btn-sm mr-1" href="/lists/<%= item.listId %>/item/<%= item.id %>/edit">Edit</a>
               <form action="/lists/<%= item.listId %>/item/<%= item.id %>/destroy" method="post">
                 <button class="btn btn-danger btn-sm" type="submit" name="button">Delete</button>
               </form>
