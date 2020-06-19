@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {});
   List.associate = function(models) {
@@ -15,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     List.hasMany(models.Items, {
       foreignKey: "listId",
       as: "items"
+    });
+
+    List.belongsTo(models.User, {
+      foreignKey: "userId",
+      onDelete: "CASCADE"
     });
   };
   return List;

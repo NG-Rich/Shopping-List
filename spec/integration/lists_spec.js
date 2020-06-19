@@ -22,9 +22,22 @@ describe("routes : lists", () => {
       .then((user) => {
         this.user = user;
 
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            email: user.email,
+            userId: user.id,
+            fName: user.fName,
+            lName: user.lName
+          }
+        }, (err, res, body) => {
+          done();
+        });
+
         List.create({
           title: "Groceries",
-          description: "Groceries 4 the week"
+          description: "Groceries 4 the week",
+          userId: this.user.id
         })
         .then((list) => {
           this.list = list;
@@ -71,7 +84,8 @@ describe("routes : lists", () => {
         url: `${base}create`,
         form : {
           title: "Groceries",
-          description: "Groceries 4 the week"
+          description: "Groceries 4 the week",
+          userId: this.user.id
         }
       }
 
@@ -125,7 +139,8 @@ describe("routes : lists", () => {
         url: `${base}${this.list.id}/update`,
         form: {
           title: "Stuff",
-          description: "Stuff I need"
+          description: "Stuff I need",
+          userId: this.user.id
         }
       }
 

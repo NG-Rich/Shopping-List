@@ -1,41 +1,71 @@
 const listQuery = require("../db/queries.lists.js");
+const Authorizer = require("../policies/application");
 
 module.exports = {
   index(req, res, next) {
-    listQuery.getAllLists((err, lists) => {
-      if (err) {
-        req.flash("notice", "Couldn't display lists!");
-        res.redirect("/");
-      }else {
-        res.render("lists/index", {lists});
-      }
-    });
+    const authorized = new Authorizer(req.user).new();
+
+    if (authorized) {
+      listQuery.getAllLists((err, lists) => {
+        if (err) {
+          req.flash("notice", "Couldn't display lists!");
+          res.redirect("/");
+        }else {
+          res.render("lists/index", {lists});
+        }
+      });
+    }else {
+      req.flash("notice", " You must be signed in to view lists!");
+      res.redirect("/users/sign_in");
+    }
   },
   new(req, res, next) {
-    res.render("lists/new");
+    const authorized = new Authorizer(req.user).new();
+
+    if (authorized) {
+      res.render("lists/new");
+    }else {
+      req.flash("notice", "You must be signed in create a list!");
+      res.redirect("/users/sign_in");
+    }
   },
   create(req, res, next) {
-    let newList = {
-      title: req.body.title,
-      description: req.body.description
-    }
+    const authorized = new Authorizer(req.user).create();
 
-    listQuery.createList(newList, (err, list) => {
-      if (err) {
-        req.flash("notice", "Couldn't create list! Try again!");
-        res.redirect("/lists/new");
-      }else {
-        res.redirect(303, `/lists/${list.id}`);
+    if (authorized) {
+      let newList = {
+        title: req.body.title,
+        description: req.body.description,
+        userId: req.user.id
       }
-    })
+
+      listQuery.createList(req, newList, (err, list) => {
+        if (err) {
+          req.flash("notice", "Couldn't create list! Try again!");
+          res.redirect("/lists/new");
+        }else {
+          res.redirect(303, `/lists/${list.id}`);
+        }
+      });
+    }else {
+      req.flash("notice", "You must be signed in to create lists!");
+      res.redirect("/users/sign_in");
+    }
   },
   show(req, res, next) {
     listQuery.getList(req.params.id, (err, list) => {
-      if (err || list == null) {
-        req.flash("notice", "Couldn't find list, sorry!");
-        res.redirect("/lists");
+      const authorized = new Authorizer(req.user, list).edit();
+
+      if(authorized) {
+        if (err || list == null) {
+          req.flash("notice", "Couldn't find list, sorry!");
+          res.redirect("/lists");
+        }else {
+          res.render("lists/show", {list});
+        }
       }else {
-        res.render("lists/show", {list});
+        req.flash("notice", "You must be signed in to view lists!");
+        res.redirect("/users/sign_in");
       }
     })
   },
@@ -45,7 +75,14 @@ module.exports = {
         req.flash("notice", "Couldn't edit list, sorry!");
         res.redirect("/lists");
       }else {
-        res.render("lists/edit", {list});
+        const authorized = new Authorizer(req.user, list).edit();
+
+        if (authorized) {
+          res.render("lists/edit", {list});
+        }else {
+          req.flash("notice", "You must be signed in to edit lists!");
+          res.redirect("/users/sign_in");
+        }
       }
     })
   },
