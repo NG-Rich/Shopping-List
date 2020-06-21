@@ -16,6 +16,11 @@
           Create a list
         </a>
       <% }else { %>
+        <div class="d-flex">
+          <a class="ml-6 btn btn-success btn" href="/lists/new" role="button">
+            Create a list
+          </a>
+        </div>
         <% lists.forEach((list) => { %>
           <ul class="list-group-item py-0 border-0">
             <li class="list-group-item">

@@ -10,16 +10,16 @@
     <h1 class="text-center py-4"><%= list.title %></h1>
 
     <div class="container px-6">
-      <form class="d-flex justify-content-center py-2" action="/lists/<%= list.id %>/item/create" method="post">
+      <form id="itemAdd" class="d-flex justify-content-center py-2" action="/lists/<%= list.id %>/item/create" method="post">
         <label class="mr-2" for="name">Item:</label>
-        <input class="mr-2" type="text" name="name" aria-describedby="itemHelp" placeholder="Item name">
+        <input id="itemInput" class="mr-2" type="text" name="name" aria-describedby="itemHelp" placeholder="Item name">
         <button type="submit" class="btn btn-success btn-sm px-2">Add Item</button>
       </form>
 
       <% if(list.items) { %>
         <% list.items.forEach((item) => { %>
-          <ul class="list-group px-5">
-            <li class="list-group-item d-flex justify-content-center align-items-baseline">
+          <ul id="items" class="list-group px-5">
+            <li id="item" class="list-group-item d-flex justify-content-center align-items-baseline">
               <%= item.name %> |
               <% if(item.purchased == false) { %>
                 <span class="form-check form-check-inline disabled">
@@ -42,7 +42,26 @@
       <% } %>
     </div>
 
-
+  
     <%- include('../static/partials/baseScripts'); %>
+    <script>
+      $(function() {
+        const socket = io();
+
+        $("#itemAdd").submit(function(e) { // this is the fn you work on
+          //e.preventDefault();
+          $ajax({type: post}) //the problem is either is shows up in socket and doesn add or doesnt show up but adds
+          socket.emit('item message', $('#itemInput').val());
+          $('#itemInput').val('');
+          return false;
+        })
+
+        socket.on('item message', function(msg) {
+          $('#items').prepend($(`<li id="item" class="list-group-item d-flex justify-content-center align-items-baseline">`).text(msg));
+        });
+      });
+    </script>
+
+    
   </body>
 </html>
